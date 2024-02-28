@@ -29,6 +29,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		// Basic Authentication을 비활성화합니다.
 		http.httpBasic().disable();
+		// Basic Authentication을 활성화합니다.
+		// http.httpBasic();
 		// CSRF 보호를 활성화합니다.
 		http.csrf();
 		// Remember-Me를 활성화합니다.

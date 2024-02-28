@@ -3,6 +3,9 @@ package org.example.personal_note.notice;
 import java.util.List;
 
 import org.example.personal_note.note.NoteRegisterDto;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,11 +23,13 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/notice") // 이 컨트롤러의 매핑된 URL을 지정합니다.
 public class NoticeController {
 
+	private final PasswordEncoder passwordEncoder;
 	private final NoticeService noticeService; // NoticeService 의존성을 주입받습니다.
 
 	// GET 요청을 처리하여 공지사항 목록을 조회하는 메서드입니다.
 	@GetMapping
 	public String getNotice(Model model) {
+		SecurityContext securityContext = SecurityContextHolder.getContext();
 		// 공지사항 서비스를 사용하여 모든 공지사항을 조회합니다.
 		List<Notice> notices = noticeService.findAll();
 		// 조회된 공지사항을 모델에 추가합니다.
