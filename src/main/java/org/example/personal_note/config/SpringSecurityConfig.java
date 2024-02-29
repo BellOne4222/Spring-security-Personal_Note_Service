@@ -18,7 +18,7 @@ import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import lombok.RequiredArgsConstructor;
 
 @Configuration
-@EnableWebSecurity
+@EnableWebSecurity // WebSecurityConfigurerAdapter 클래스를 상속받은 설정 클래스에 사용하여 Spring Security를 활성화합니다.
 @RequiredArgsConstructor
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
