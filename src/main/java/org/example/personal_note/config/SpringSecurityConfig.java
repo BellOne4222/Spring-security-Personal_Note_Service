@@ -1,6 +1,9 @@
 package org.example.personal_note.config;
 
+import org.example.personal_note.jwt.JwtAuthenticationFilter;
+import org.example.personal_note.jwt.JwtAuthorizationFilter;
 import org.example.personal_note.user.User;
+import org.example.personal_note.user.UserRepository;
 import org.example.personal_note.user.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,8 +12,11 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 
@@ -23,6 +29,7 @@ import lombok.RequiredArgsConstructor;
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	private final UserService userService;
+	private final UserRepository userRepository;
 
 	// HTTP 보안 설정을 구성하는 메서드입니다.
 	@Override
@@ -35,6 +42,17 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 		http.csrf();
 		// Remember-Me를 활성화합니다.
 		http.rememberMe();
+		// stateless
+		// http.sessionManagement()
+		// 	.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+		// jwt filter
+		http.addFilterBefore(
+			new JwtAuthenticationFilter(authenticationManager()),
+			UsernamePasswordAuthenticationFilter.class
+		).addFilterBefore(
+			new JwtAuthorizationFilter(userRepository),
+			BasicAuthenticationFilter.class
+		);
 		// URL에 대한 인가 규칙을 설정합니다.
 		http.authorizeRequests()
 			// "/"와 "/home", "/signup" 경로는 모든 사용자에게 허용합니다.
