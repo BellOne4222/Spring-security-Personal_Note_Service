@@ -35,6 +35,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		// Basic Authentication을 비활성화합니다.
+
 		http.httpBasic().disable();
 		// Basic Authentication을 활성화합니다.
 		// http.httpBasic();
